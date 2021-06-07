@@ -9,4 +9,5 @@ Grad-Cam is implemented in models/grad_cam.py
 
 ## Schedule
 
-Resnet18 is now being trained on 26422 in tmux 114
+Resnet18 for cifar10 is now being trained on 26422 in tmux 114
+Resnet18 for fmnist is now being trained on 26422 in tmux 115

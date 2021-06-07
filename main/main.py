@@ -21,7 +21,7 @@ from models.resnet import ResNet18
 parser = argparse.ArgumentParser()
 parser.add_argument('--arch', default='resnet', type=str)
 parser.add_argument('--dataset', default='cifar10', type=str)
-parser.add_argument('--datapath', default='./data/cifar10/', type=str)
+parser.add_argument('--datapath', default='./data/', type=str)
 parser.add_argument('--train_batchsize', default=64, type=int)
 parser.add_argument('--val_batchsize', default=16, type=int)
 parser.add_argument('--lr', default=0.1, type=float)
@@ -31,8 +31,8 @@ parser.add_argument('--checkpoint', default='./checkpoints/', type=str)
 parser.add_argument('--resume', default='./checkpoints/', type=str)
 parser.add_argument('--evaluate', action='store_true')
 parser.add_argument('--gpu-id', default='1', type=str)
-parser.add_argument('--epochs', default=50, type=int)
-parser.add_argument('--schedule', type=int, nargs='+', default=[10, 30])
+parser.add_argument('--epochs', default=90, type=int)
+parser.add_argument('--schedule', type=int, nargs='+', default=[20, 60])
 parser.add_argument('--gamma', type=float, default=0.1)
 
 args = parser.parse_args()
@@ -42,8 +42,8 @@ os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_id
 def main():
     
     # Prepare dataset
-    traindir = args.datapath + 'train/'
-    valdir = args.datapath + 'val/'
+    traindir = args.datapath + args.dataset + '/train/'
+    valdir = args.datapath + args.dataset + '/val/'
     if args.dataset == 'cifar10':
         train_transform = transforms.Compose([
             transforms.RandomResizedCrop(32),
@@ -63,7 +63,7 @@ def main():
             transforms.Normalize(mean=[0.2888097,], std=[0.3549146,])
         ])
         val_transform = transforms.Compose([
-            transform.Resized(32),
+            transforms.Resize(32),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.2888097,], std=[0.3549146,])
         ])
