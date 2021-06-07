@@ -80,5 +80,19 @@ class GradCam(object):
 
         return res
 
+    def heatmap(img, gray_cam):
+        gray_cam = cv2.resize(gray_cam, (img.shape[0], img.shape[1]))
+        
+        # cv2 receive 0-255 scale image as input
+        color_cam = cv2.applyColorMap(np.uint8(255 * gray_cam), cv2.COLORMAP_JET)
+        color_cam = np.float32(color_cam) / 255
+        cam = color_cam + np.float32(img)
+        # back to 0-1 scalue
+        cam = cam / np.max(cam)
+
+        return cam
+
+
+
 
 
