@@ -11,3 +11,5 @@ Grad-Cam is implemented in models/grad_cam.py
 
 Resnet18 for cifar10 is now being trained on 26422 in tmux 114
 Resnet18 for fmnist is now being trained on 26422 in tmux 115
+VGG16 for cifar10 is now being trained on 26422 in tmux 116
+VGG16 for fmnist is now being trained on 26422 in tmux 126

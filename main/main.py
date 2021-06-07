@@ -17,6 +17,8 @@ from utils.logger import Logger
 from utils.bar import Bar
 from utils.averager import AverageMeter
 from models.resnet import ResNet18
+from models.vgg16 import VGG16
+from models.alexnet import AlexNet
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--arch', default='resnet', type=str)
@@ -32,7 +34,7 @@ parser.add_argument('--resume', default='./checkpoints/', type=str)
 parser.add_argument('--evaluate', action='store_true')
 parser.add_argument('--gpu-id', default='1', type=str)
 parser.add_argument('--epochs', default=90, type=int)
-parser.add_argument('--schedule', type=int, nargs='+', default=[20, 60])
+parser.add_argument('--schedule', type=int, nargs='+', default=[50, ])
 parser.add_argument('--gamma', type=float, default=0.1)
 
 args = parser.parse_args()
@@ -68,7 +70,7 @@ def main():
             transforms.Normalize(mean=[0.2888097,], std=[0.3549146,])
         ])
     else:
-        raise NotImplementedError
+        raise NotImplementedError("Dataset {} is not implemented.".format(args.dataset))
     train_dataset = ImageFolder(traindir, train_transform)
     val_dataset = ImageFolder(valdir, val_transform)
     train_loader = torch.utils.data.DataLoader(train_dataset,
@@ -81,14 +83,12 @@ def main():
     # Prepare the model & loss & optimizer
     if args.arch == 'resnet':
         model = ResNet18()
-    else:
-        raise NotImplementedError("Arch {} is not implemented.".format(args.arch))
-    '''
     elif args.arch == 'alexnet':
         model = AlexNet()
-    elif args.arch == 'vgg19':
-        model = VGG19()
-    '''
+    elif args.arch == 'vgg':
+        model = VGG16()
+    else:
+        raise NotImplementedError("Arch {} is not implemented.".format(args.arch))
     model = nn.DataParallel(model).cuda()
     criterion = nn.CrossEntropyLoss().cuda()
     optimizer = torch.optim.SGD(model.parameters(), args.lr,
@@ -98,8 +98,8 @@ def main():
     if args.resume:
         args.resume = os.path.join(args.resume, args.dataset + '/', args.arch + '/')
         if os.path.isfile(args.resume):
-            print("=> loading checkpoint '{}'".format(args.resume))
-            checkpoint = torch.load(args.resume)
+            print("=> loading checkpoint '{}'".format(args.resume + 'model_best.pth.tar'))
+            checkpoint = torch.load(args.resume + 'model_best.pth.tar')
             start_epoch = checkpoint['epoch']
             best_acc = checkpoint['best_acc']
             model.load_state_dict(checkpoint['state_dict'])
