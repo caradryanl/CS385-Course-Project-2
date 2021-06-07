@@ -32,7 +32,7 @@ parser.add_argument('--resume', default='./checkpoints/', type=str)
 parser.add_argument('--evaluate', action='store_true')
 parser.add_argument('--gpu-id', default='1', type=str)
 parser.add_argument('--epochs', default=50, type=int)
-parser.add_argument('--schedule', type=int, nargs='+', default=[10, 20, 30, 40])
+parser.add_argument('--schedule', type=int, nargs='+', default=[10, 30])
 parser.add_argument('--gamma', type=float, default=0.1)
 
 args = parser.parse_args()
@@ -134,7 +134,7 @@ def main():
         return
 
     # Visualization
-    writer = SummaryWriter(os.path.join(args.checkpoint, 'logs'))
+    writer = SummaryWriter(os.path.join(checkpoint_path, 'logs'))
 
     # Train
     for epoch in range(start_epoch, args.epochs):
