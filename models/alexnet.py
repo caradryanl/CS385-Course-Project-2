@@ -18,38 +18,50 @@ class AlexNet(nn.Module):
     def __init__(self, cls_num=10):
         super(AlexNet, self).__init__()
         layers = []
-        layers.append(conv3x3(3, 64, 2))
+        layers.append(conv3x3(3, 24, 2))
         layers.append(nn.ReLU(inplace=True))
         layers.append(nn.MaxPool2d(kernel_size=2))
+
+        # [N, 64, 16, 16]
         
-        layers.append(conv3x3(64, 192, 1))
+        layers.append(conv3x3(24, 96, 1))
         layers.append(nn.ReLU(inplace=True))
         layers.append(nn.MaxPool2d(kernel_size=2))
 
-        layers.append(conv3x3(192, 384, 1))
+        # [N, 192, 16, 16]
+
+        layers.append(conv3x3(96, 192, 1))
         layers.append(nn.ReLU(inplace=True))
 
-        layers.append(conv3x3(384, 256, 1))
+        # [N, 384, 16, 16]
+
+        layers.append(conv3x3(192, 192, 1))
         layers.append(nn.ReLU(inplace=True))
 
-        layers.append(conv3x3(256, 256, 1))
+        # [N, 256, 16, 16]
+
+        layers.append(conv3x3(192, 96, 1))
         layers.append(nn.ReLU(inplace=True))
         layers.append(nn.MaxPool2d(kernel_size=2))
+
+
+        # [N, 96, 16, 16]
 
         self.model = nn.Sequential(*layers)
 
         self.classifier = nn.Sequential(
             nn.Dropout(),
-            nn.Linear(256 * 2 * 2, 4096),
+            nn.Linear(384, 1024),
             nn.ReLU(inplace=True),
             nn.Dropout(),
-            nn.Linear(4096, 4096),
+            nn.Linear(1024, 1024),
             nn.ReLU(inplace=True),
-            nn.Linear(4096, cls_num),
+            nn.Linear(1024, cls_num),
         )
 
     def forward(self, x):
         x = self.model(x)
+        # print(x.shape)
         x = x.view(x.size(0), -1)
         x = self.classifier(x)
         

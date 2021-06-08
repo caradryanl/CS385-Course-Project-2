@@ -33,8 +33,8 @@ parser.add_argument('--checkpoint', default='./checkpoints/', type=str)
 parser.add_argument('--resume', default='./checkpoints/', type=str)
 parser.add_argument('--evaluate', action='store_true')
 parser.add_argument('--gpu-id', default='1', type=str)
-parser.add_argument('--epochs', default=90, type=int)
-parser.add_argument('--schedule', type=int, nargs='+', default=[50, ])
+parser.add_argument('--epochs', default=150, type=int)
+parser.add_argument('--schedule', type=int, nargs='+', default=[50, 90, 130])
 parser.add_argument('--gamma', type=float, default=0.1)
 
 args = parser.parse_args()
@@ -85,6 +85,10 @@ def main():
         model = ResNet18()
     elif args.arch == 'alexnet':
         model = AlexNet()
+        args.schedule = [5, 50, 75]
+        args.epoch = 90
+        args.gamma = 0.1
+        args.weight_decay = 1e-3
     elif args.arch == 'vgg':
         model = VGG16()
     else:
