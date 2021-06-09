@@ -16,12 +16,12 @@ from utils.accuracy import accuracy
 from utils.logger import Logger
 from utils.bar import Bar
 from utils.averager import AverageMeter
-from models.resnet import ResNet18
-from models.vgg16 import VGG16
+from models.resnet import ResNet18, ResNet50
+from models.vgg import VGG16, VGG19
 from models.alexnet import AlexNet
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--arch', default='resnet', type=str)
+parser.add_argument('--arch', default='resnet50', type=str)
 parser.add_argument('--dataset', default='cifar10', type=str)
 parser.add_argument('--datapath', default='./data/', type=str)
 parser.add_argument('--train_batchsize', default=64, type=int)
@@ -81,16 +81,28 @@ def main():
         num_workers=4, pin_memory=True)
 
     # Prepare the model & loss & optimizer
-    if args.arch == 'resnet':
+    if args.arch == 'resnet18':
         model = ResNet18()
+    elif args.arch == 'resnet50':
+        model = ResNet50()
+        args.schedule = [70, 110, 130]
+        args.epoch = 150
+        args.gamma = 0.1
+        args.weight_decay = 5e-5
     elif args.arch == 'alexnet':
         model = AlexNet()
         args.schedule = [5, 50, 75]
         args.epoch = 90
         args.gamma = 0.1
         args.weight_decay = 1e-3
-    elif args.arch == 'vgg':
+    elif args.arch == 'vgg16':
         model = VGG16()
+    elif args.arch == 'vgg19':
+        model = VGG19()
+        args.schedule = [70, 110, 130]
+        args.epoch = 150
+        args.gamma = 0.1
+        args.weight_decay = 5e-5
     else:
         raise NotImplementedError("Arch {} is not implemented.".format(args.arch))
     model = nn.DataParallel(model).cuda()

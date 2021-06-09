@@ -1,3 +1,4 @@
 data/
+checkpoints/
 *.pth.tar
 *.zip
