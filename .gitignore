@@ -2,3 +2,4 @@ data/
 checkpoints/
 *.pth.tar
 *.zip
+sample.py
