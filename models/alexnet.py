@@ -28,24 +28,24 @@ class AlexNet(nn.Module):
         layers.append(nn.ReLU(inplace=True))
         layers.append(nn.MaxPool2d(kernel_size=2))
 
-        # [N, 192, 16, 16]
+        # [N, 192, 8, 8]
 
         layers.append(conv3x3(96, 192, 1))
         layers.append(nn.ReLU(inplace=True))
 
-        # [N, 384, 16, 16]
+        # [N, 384, 4, 4]
 
         layers.append(conv3x3(192, 192, 1))
         layers.append(nn.ReLU(inplace=True))
 
-        # [N, 256, 16, 16]
+        # [N, 256, 4, 4]
 
         layers.append(conv3x3(192, 96, 1))
         layers.append(nn.ReLU(inplace=True))
         layers.append(nn.MaxPool2d(kernel_size=2))
 
 
-        # [N, 96, 16, 16]
+        # [N, 96, 2, 2]
 
         self.model = nn.Sequential(*layers)
 

@@ -168,5 +168,144 @@ class VGG19(nn.Module):
 
         return x
 
+class VGG16_V1(nn.Module):
+
+    def __init__(self, cls_num=10):
+        super(VGG16_V1, self).__init__()
+
+        layers = []
+        layers.append(conv3x3(3, 64, 1))
+        layers.append(nn.BatchNorm2d(64))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(64, 64, 1))
+        layers.append(nn.BatchNorm2d(64))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.MaxPool2d(kernel_size=3, stride=2))
+
+        layers.append(conv3x3(64, 128, 1))
+        layers.append(nn.BatchNorm2d(128))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(128, 128, 1))
+        layers.append(nn.BatchNorm2d(128))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.MaxPool2d(kernel_size=3, stride=2))
+
+        layers.append(conv3x3(128, 256, 1))
+        layers.append(nn.BatchNorm2d(256))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(256, 256, 1))
+        layers.append(nn.BatchNorm2d(256))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(256, 256, 1))
+        layers.append(nn.BatchNorm2d(256))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.MaxPool2d(kernel_size=3, stride=2))
+
+        layers.append(conv3x3(256, 512, 1))
+        layers.append(nn.BatchNorm2d(512))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(512, 512, 1))
+        layers.append(nn.BatchNorm2d(512))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(512, 512, 1))
+        layers.append(nn.BatchNorm2d(512))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
+
+        layers.append(conv3x3(512, 512, 1))
+        layers.append(nn.BatchNorm2d(512))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(512, 512, 1))
+        layers.append(nn.BatchNorm2d(512))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(512, 512, 1))
+        layers.append(nn.BatchNorm2d(512))
+        layers.append(nn.ReLU(inplace=True))
+        #layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
+
+        self.model = nn.Sequential(*layers)
+        self.classifier = nn.Sequential(
+            nn.Linear(512, 4096),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(4096, cls_num)
+        )
+
+
+    def forward(self, x):
+        x = self.model(x)
+        x = x.view(x.shape[0], -1)
+        x = self.classifier(x)
+
+        return x
+
+class VGG16_V2(nn.Module):
+
+    def __init__(self, cls_num=10):
+        super(VGG16_V2, self).__init__()
+
+        layers = []
+        layers.append(conv3x3(3, 64, 1))
+        layers.append(nn.BatchNorm2d(64))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(64, 64, 1))
+        layers.append(nn.BatchNorm2d(64))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.MaxPool2d(kernel_size=3, stride=2))
+
+        layers.append(conv3x3(64, 128, 1))
+        layers.append(nn.BatchNorm2d(128))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(128, 128, 1))
+        layers.append(nn.BatchNorm2d(128))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.MaxPool2d(kernel_size=3, stride=2))
+
+        layers.append(conv3x3(128, 256, 1))
+        layers.append(nn.BatchNorm2d(256))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(256, 256, 1))
+        layers.append(nn.BatchNorm2d(256))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(256, 256, 1))
+        layers.append(nn.BatchNorm2d(256))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.MaxPool2d(kernel_size=3, stride=2))
+
+        layers.append(conv3x3(256, 512, 1))
+        layers.append(nn.BatchNorm2d(512))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(512, 512, 1))
+        layers.append(nn.BatchNorm2d(512))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(512, 512, 1))
+        layers.append(nn.BatchNorm2d(512))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
+
+        layers.append(conv3x3(512, 512, 1))
+        layers.append(nn.BatchNorm2d(512))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(512, 512, 1))
+        layers.append(nn.BatchNorm2d(512))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(conv3x3(512, 512, 1))
+        layers.append(nn.BatchNorm2d(512))
+        layers.append(nn.ReLU(inplace=True))
+        #layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
+
+        self.model = nn.Sequential(*layers)
+        self.classifier = nn.Sequential(
+            nn.Dropout(),
+            nn.Linear(512, cls_num),
+        )
+
+
+    def forward(self, x):
+        x = self.model(x)
+        x = F.relu(x.view(x.shape[0], -1))
+        x = self.classifier(x)
+
+        return x
 
 

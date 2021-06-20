@@ -15,3 +15,8 @@ VGG16 for cifar10 is now being trained on 26422 in tmux 116
 VGG16 for fmnist is now being trained on 26422 in tmux 126(finished)
 AlexNet for cifar10 is now being trained on 26422 in tmux 115
 AlexNet for fmnist is now being trained on 26422 in tmux 126
+
+vgg16_v1 fmnist 114
+vgg16_v1 cifar 116
+vgg16_v2 cifar 123
+vgg16_v2 fmnist 128
