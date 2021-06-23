@@ -88,7 +88,7 @@ def main():
         args.schedule = [70, 110, 130]
         args.epoch = 150
         args.gamma = 0.1
-        args.weight_decay = 5e-4
+        args.weight_decay = 1e-4
     elif args.arch == 'alexnet':
         model = AlexNet()
         args.schedule = [5, 50, 75]
@@ -102,7 +102,7 @@ def main():
         args.schedule = [70, 110, 130]
         args.epoch = 150
         args.gamma = 0.1
-        args.weight_decay = 5e-5
+        args.weight_decay = 1e-5
     elif args.arch == 'vgg16_v1':
         model = VGG16_V1()
     elif args.arch == 'vgg16_v2':

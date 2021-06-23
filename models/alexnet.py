@@ -19,29 +19,24 @@ class AlexNet(nn.Module):
         super(AlexNet, self).__init__()
         layers = []
         layers.append(conv3x3(3, 24, 2))
-        layers.append(nn.ReLU(inplace=True))
         layers.append(nn.MaxPool2d(kernel_size=2))
 
         # [N, 64, 16, 16]
         
         layers.append(conv3x3(24, 96, 1))
-        layers.append(nn.ReLU(inplace=True))
         layers.append(nn.MaxPool2d(kernel_size=2))
 
         # [N, 192, 8, 8]
 
         layers.append(conv3x3(96, 192, 1))
-        layers.append(nn.ReLU(inplace=True))
 
         # [N, 384, 4, 4]
 
         layers.append(conv3x3(192, 192, 1))
-        layers.append(nn.ReLU(inplace=True))
 
         # [N, 256, 4, 4]
 
         layers.append(conv3x3(192, 96, 1))
-        layers.append(nn.ReLU(inplace=True))
         layers.append(nn.MaxPool2d(kernel_size=2))
 
 
@@ -52,10 +47,8 @@ class AlexNet(nn.Module):
         self.classifier = nn.Sequential(
             nn.Dropout(),
             nn.Linear(384, 1024),
-            nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(1024, 1024),
-            nn.ReLU(inplace=True),
             nn.Linear(1024, cls_num),
         )
 
